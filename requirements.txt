@@ -1,0 +1,14 @@
+click==8.3.2
+iniconfig==2.3.0
+Jinja2==3.1.6
+loguru==0.7.3
+markdown-it-py==4.0.0
+MarkupSafe==3.0.3
+mdurl==0.1.2
+packaging==26.0
+pluggy==1.6.0
+Pygments==2.20.0
+pytest==9.0.2
+python-nmap==0.7.1
+rich==14.3.3
+scapy==2.7.0

@@ -4,7 +4,7 @@ import socket
 #This file for creating useful function before starting the real scanning 
 #I will start with input validation 
 
-def Ip_validation(ip):
+def ip_validation(ip):
     try :
         ipaddress.ip_address(ip)
         return ip

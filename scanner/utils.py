@@ -4,17 +4,23 @@ import socket
 #This file for creating useful function before starting the real scanning 
 #I will start with input validation 
 
-def ip_validation(ip):
-    try :
-        ipaddress.ip_address(ip)
-        return ip
+
+def parse_target(input):
+    try:
+        net = ipaddress.ip_network(input, strict=False)
+        if net.num_addresses ==1 :
+            return [str(net.network_address)]
+        return [str(ip) for ip in net.hosts()]
     except ValueError:
-        #for hostnames 
         try :
-            Ip = socket.gethostbyname(ip)
-            return Ip
+            Hostname = socket.gethostbyname(input) 
+            return [Hostname]
         except socket.gaierror:
-            raise ValueError("the ip adresse is not valid.")
+            raise ValueError(f"'{input}' is not a valid IP, CIDR range, or hostname.")
+
+       
+
+
 def port_validation(port):
     try : 
 

@@ -51,3 +51,14 @@ def scanning(ip:str,ports:str, timeout:float = 1.0, threads:int = 100):
     # Sort by port number for clean output
     return sorted(results, key=lambda r: r.port)
      
+def scan_targets(hosts:list, ports:list,timeout:float =1.0, threads=100 ): 
+    results = []
+    with ThreadPoolExecutor(max_workers=threads) as executor :
+          futures = {
+               executor.submit(scanning, ip,ports,timeout): ip for ip in hosts
+          }
+          for future in as_completed(futures):
+            host_result = future.result()
+            results.extend(host_result)
+    return sorted(results, key=lambda x: x.host)
+    

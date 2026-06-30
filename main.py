@@ -1,5 +1,5 @@
-from scanner.portscan import scanning
-from scanner.utils import ip_validation,port_validation
+from scanner.portscan import scan_targets
+from scanner.utils import port_validation,parse_target
 import click 
 @click.command()
 @click.argument("ip")
@@ -18,21 +18,21 @@ def main(ip : str ,ports:str,  timeout:float, threads:int, open_only:bool):
         python main.py scanme.nmap.org -p 1-1024 -t 2
     """
     try :
-        ip = ip_validation(ip)
+        hosts = parse_target(ip)
         ports = port_validation(ports)
     except ValueError as e :
         click.echo(f"[ERROR] {e}", err=True)
         raise SystemExit(1)
-    results = scanning(ip, ports,timeout, threads)
+    results = scan_targets(hosts,ports,timeout,threads)
     for element in results:
-        if element.state == "open" :
-            click.echo(f"  [OPEN]     {element.host}:{element.port}  {element.banner[:50]}")
-        
-        elif not open_only:
-            if element.state == "closed":
-                click.echo(f"  [CLOSED]   {element.host}:{element.port}")
-            else:
-                click.echo(f"  [FILTERED] {element.host}:{element.port}")
+            if element.state == "open" :
+                click.echo(f"  [OPEN]     {element.host}:{element.port}  {element.banner[:50]}")
+            
+            elif not open_only:
+                if element.state == "closed":
+                    click.echo(f"  [CLOSED]   {element.host}:{element.port}")
+                else:
+                    click.echo(f"  [FILTERED] {element.host}:{element.port}")
     # Summary line
     open_count = sum(1 for r in results if r.state == "open")
     click.echo(f"\n{open_count} open port(s) found out of {len(ports)} scanned.")
